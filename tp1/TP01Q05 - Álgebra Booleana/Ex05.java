@@ -78,7 +78,7 @@ public class Ex05 {
                 }
                 String operacao = pilha.pop();
                 boolean resultado = switch (operacao) {
-                    case "nao" -> nao(boolArg(listaDeArgumentos.get(0)));
+                    case "nao" -> nao(boolArg(listaDeArgumentos.getFirst()));
                     case "e" -> e(listaDeArgumentos);
                     default -> ou(listaDeArgumentos);
                 };

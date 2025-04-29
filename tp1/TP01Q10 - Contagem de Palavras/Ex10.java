@@ -1,23 +1,23 @@
+import java.util.Scanner;
 
 public class Ex10{
 
     public static void main(String[] args){
 
-        String str; 
+        String str;
+	Scanner input = new Scanner(System.in);
 
-        str = MyIO.readLine();
+        str = input.nextLine();
 	do{
-        	int cont = 0;
-
-        	for(int i = 0; i < str.length(); i++){
-            	if(str.charAt(i) == ' ') cont++;
-        	}
+        	String[] a = str.split(" ");
         
-        	cont++;
+        	int cont = a.length;
 
         	System.out.println(cont);
 		
-		str = MyIO.readLine();
+		str = input.nextLine();
 	}while(!str.equals("FIM"));
+
+	input.close();
     }
 }

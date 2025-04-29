@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class Ex11 {
     public static int comMaxSubstring(String s) {
@@ -25,13 +26,15 @@ public class Ex11 {
     }
 
     public static void main(String[] args) {
-
+	    Scanner input = new Scanner(System.in);
 	    String str;
-	    str = MyIO.readLine();
+	    str = input.nextLine();
         do{            
 	    System.out.println(comMaxSubstring(str));
-	    str = MyIO.readLine();
+	    str = input.nextLine();
         }while(!str.equals("FIM"));
+
+	input.close();
 
     }
 }

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/TP01Q01 - Palíndromo" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/TP01Q02 - Palíndromo em C" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/TP01Q03 - Ciframento" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/TP01Q04 - Alteração Aleatória" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/TP01Q05 - Álgebra Booleana" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/TP01Q06 - Is" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/TP01Q07 - Inversão de String" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/TP01Q08 - Soma de Dígitos" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/TP01Q09 - Verificação de Anagrama" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/TP01Q10 - Contagem de Palavras" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/TP01Q11 - Substring Mais Longa Sem Repetição" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/TP01Q12 - Validação de Senha" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/TP01Q13 - Leitura de Página HTML" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/TP01Q14 - Arquivo em Java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/TP01Q15 - Arquivo em C" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/TP01Q16 - RECURSIVO - Palíndromo" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/TP01Q17 - RECURSIVO - Palíndromo em C" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/TP01Q18 - RECURSIVO - Ciframento" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/TP01Q19 - RECURSIVO - Álgebra Booleana" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/TP01Q20 - RECURSIVO - Is" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/TP01Q21 - Inversão de String em C" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/TP01Q22 - Soma de Dígitos em C" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
