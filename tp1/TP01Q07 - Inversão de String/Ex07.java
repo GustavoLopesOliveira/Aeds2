@@ -23,6 +23,8 @@ public class Ex07{
 
         str = input.nextLine();
 
-        System.out.println(inverteString(str));
+       System.out.println(inverteString(str));
+       
+       input.close();
     }
 }
