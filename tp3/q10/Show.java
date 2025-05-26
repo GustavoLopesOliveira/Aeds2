@@ -226,19 +226,21 @@ public class Show {
         return copia;
     }
 
-    static class LinkedList{
+    static class DoubleLinkedList{
         class Node{
             Show show;
             Node next;
+            Node prev;
             public Node(Show show){
                 this.show = show;
                 this.next = null;
+                this.prev = null;
             }
         }
 
         Node head,tail;
 
-        public LinkedList(){
+        public DoubleLinkedList(){
             head = null;
             tail = null;
         }
@@ -250,6 +252,7 @@ public class Show {
                 tail = newNode;
             }else{
                 newNode.next = head;
+                head.prev = newNode;
                 head = newNode;
             }
         }
@@ -261,15 +264,18 @@ public class Show {
                 tail = newNode;
             }else{
                 tail.next = newNode;
+                newNode.prev = tail;
                 tail = newNode;
             }
         }
-
+        //PAREI AQUI 
         public void addMiddle(Show show, int pos){
             Node newNode = new Node(show);
             if(head == null){
                 head = newNode;
                 tail = newNode;
+
+
             }else{
                 Node current = head;
                 for(int i = 0; i < pos - 1 && current != null; i++){
@@ -332,34 +338,18 @@ public class Show {
             }
         }
 
-        public void showList() {
-            showListRecursive(head, size(), size());
-        }
-
-        private void showListRecursive(Node node, int index,int size) {
-            if (node == null) {
-            return;
-            }
-            showListRecursive(node.next, index - 1,size);
-            System.out.print("[" + ( size - index ) + "] ");
-            node.show.imprimir();
-
-        }
-
-        public int size(){
+        public void showList(){
             Node i = head;
-            int cont = 0;
             while(i != null){
-                cont++;
+                i.show.imprimir();
                 i = i.next;
             }
-            return cont;
         }
     }
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         ArrayList<Show> listaShow = ler();
-        LinkedList lista = new LinkedList();
+        DoubleLinkedList lista = new DoubleLinkedList();
         String id = "";
         id = input.nextLine();
         while (!id.equals("FIM")) {
@@ -369,55 +359,6 @@ public class Show {
                 }
             }
             id = input.nextLine();
-        }
-        
-        int cont = input.nextInt();
-        input.nextLine();
-
-        
-        for(int i = 0; i < cont; i++){
-            String entrada = input.nextLine();
-            String[] str = entrada.split(" ");
-            String comando = str[0];
-            
-            if(comando.equals("II")){
-                String idShow = str[1];
-                for(int j = 0; j < listaShow.size(); j++){
-                    if(listaShow.get(j).getShowId().equals(idShow)){
-                        lista.addFront(listaShow.get(j));
-                    }
-                }
-            }else if(comando.equals("I")){
-                String idShow = str[1];
-                for(int j = 0; j < listaShow.size(); j++){
-                    if(listaShow.get(j).getShowId().equals(idShow)){
-                        lista.addBack(listaShow.get(j));
-                    }
-                }
-            }else if(comando.equals("I*")){
-                String posicao = str[1];
-                String idShow = str[2];
-                int pos = Integer.parseInt(posicao);
-
-                for(int j = 0; j < listaShow.size(); j++){
-                    if(listaShow.get(j).getShowId().equals(idShow)){
-                        lista.addMiddle(listaShow.get(j), pos);
-                    }
-                }
-                
-            }else if(comando.equals("RI")){
-                Show show = lista.removeFront();
-                System.out.println("(R) " + show.getTitle());
-            }else if(comando.equals("R")){
-                Show show = lista.removeBack();
-                System.out.println("(R) " + show.getTitle());
-            }else if(comando.equals("R*")){
-                String posicao = str[1];
-                int pos = Integer.parseInt(posicao);
-                Show show = lista.removeMiddle(pos);
-                System.out.println("(R) " + show.getTitle());
-            }
-
         }
 
         lista.showList();
