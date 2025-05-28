@@ -226,124 +226,200 @@ public class Show {
         return copia;
     }
 
-    static class DoubleLinkedList{
-        class Node{
+
+    static class DoubleLinkedList {
+        class Node {
             Show show;
             Node next;
             Node prev;
-            public Node(Show show){
+            public Node(Show show) {
                 this.show = show;
                 this.next = null;
                 this.prev = null;
             }
         }
 
-        Node head,tail;
+        Node head, tail;
 
-        public DoubleLinkedList(){
+        public DoubleLinkedList() {
             head = null;
             tail = null;
         }
-        
-        public void addFront(Show show){
+
+        public void addFront(Show show) {
             Node newNode = new Node(show);
-            if(head == null){
+            if (head == null) {
                 head = newNode;
                 tail = newNode;
-            }else{
+            } else {
                 newNode.next = head;
                 head.prev = newNode;
                 head = newNode;
             }
         }
 
-        public void addBack(Show show){
+        public void addBack(Show show) {
             Node newNode = new Node(show);
-            if(head == null){
+            if (head == null) {
                 head = newNode;
                 tail = newNode;
-            }else{
+            } else {
                 tail.next = newNode;
                 newNode.prev = tail;
                 tail = newNode;
             }
         }
-        //PAREI AQUI 
-        public void addMiddle(Show show, int pos){
+
+        public void addMiddle(Show show, int pos) {
+            if (pos <= 0) {
+                addFront(show);
+                return;
+            }
             Node newNode = new Node(show);
-            if(head == null){
-                head = newNode;
-                tail = newNode;
-
-
-            }else{
-                Node current = head;
-                for(int i = 0; i < pos - 1 && current != null; i++){
-                    current = current.next;
+            Node current = head;
+            int idx = 0;
+            while (current != null && idx < pos) {
+                current = current.next;
+                idx++;
+            }
+            if (current == null) {
+                addBack(show);
+            } else {
+                Node prevNode = current.prev;
+                newNode.next = current;
+                newNode.prev = prevNode;
+                if (prevNode != null) {
+                    prevNode.next = newNode;
                 }
-                if(current != null){
-                    newNode.next = current.next;
-                    current.next = newNode;
-                }else{
-                    tail.next = newNode;
-                    tail = newNode;
-                }
+                current.prev = newNode;
+                if (pos == 0) head = newNode;
             }
         }
 
-        public Show removeFront(){
-            if(head == null){
+        public Show removeFront() {
+            if (head == null) {
                 return null;
-            }else{
-                Show show = head.show;
+            }
+            Show show = head.show;
+            if (head == tail) {
+                head = null;
+                tail = null;
+            } else {
                 head = head.next;
-                return show;
+                head.prev = null;
             }
-        }
-        public Show removeBack(){
-            if(head == null){
-                return null;
-            }else{
-                Show show = tail.show;
-                if(head == tail){
-                    head = null;
-                    tail = null;
-                }else{
-                    Node current = head;
-                    while(current.next != tail){
-                        current = current.next;
-                    }
-                    current.next = null;
-                    tail = current;
-                }
-                return show;
-            }
+            return show;
         }
 
-        public Show removeMiddle(int pos){
-            if(head == null){
+        public Show removeBack() {
+            if (tail == null) {
                 return null;
-            }else{
-                Node current = head;
-                for(int i = 0; i < pos - 1 && current != null; i++){
-                    current = current.next;
-                }
-                if(current != null && current.next != null){
-                    Show show = current.next.show;
-                    current.next = current.next.next;
-                    return show;
-                }else{
-                    return null;
-                }
             }
+            Show show = tail.show;
+            if (head == tail) {
+                head = null;
+                tail = null;
+            } else {
+                tail = tail.prev;
+                tail.next = null;
+            }
+            return show;
         }
 
-        public void showList(){
+        public Show removeMiddle(int pos) {
+            if (head == null) return null;
+            if (pos == 0) return removeFront();
+            Node current = head;
+            int idx = 0;
+            while (current != null && idx < pos) {
+                current = current.next;
+                idx++;
+            }
+            if (current == null) return null;
+            Show show = current.show;
+            Node prevNode = current.prev;
+            Node nextNode = current.next;
+            if (prevNode != null) prevNode.next = nextNode;
+            if (nextNode != null) nextNode.prev = prevNode;
+            if (current == tail) tail = prevNode;
+            return show;
+        }
+
+        public void showList() {
             Node i = head;
-            while(i != null){
+            while (i != null) {
                 i.show.imprimir();
                 i = i.next;
             }
+        }
+
+        private Node getNodeAt(int index) {
+            Node current = head;
+            int idx = 0;
+            while (current != null && idx < index) {
+                current = current.next;
+                idx++;
+            }
+            return current;
+        }
+        private void swap(int i, int j) {
+            Node nodeI = getNodeAt(i);
+            Node nodeJ = getNodeAt(j);
+            if (nodeI != null && nodeJ != null) {
+                Show temp = nodeI.show;
+                nodeI.show = nodeJ.show;
+                nodeJ.show = temp;
+            }
+        }
+
+        public static int compare(String a, String b) {
+            return a.trim().compareToIgnoreCase(b.trim());
+        }
+
+        public static int compareDateAddedAndTitle(Show a, Show b) {
+            if (a.getDateAdded() == null || b.getDateAdded() == null) {
+            return compare(a.getTitle(), b.getTitle());
+            }
+            int compDate = a.getDateAdded().compareTo(b.getDateAdded());
+            if (compDate != 0) {
+            return compDate;
+            }
+            return compare(a.getTitle(), b.getTitle());
+        }
+
+        public void quickSort(int left, int right, int[] comparacoes, int[] movimentacoes) {
+            if (left < right) {
+                int pivotIndex = partition(left, right, comparacoes, movimentacoes);
+                quickSort(left, pivotIndex - 1, comparacoes, movimentacoes);
+                quickSort(pivotIndex + 1, right, comparacoes, movimentacoes);
+            }
+        }
+
+        private int partition(int left, int right, int[] comparacoes, int[] movimentacoes) {
+            Show pivot = getNodeAt(right).show;
+            int i = left - 1;
+            for (int j = left; j < right; j++) {
+            comparacoes[0]++;
+            if (compareDateAddedAndTitle(getNodeAt(j).show, pivot) < 0) {
+                i++;
+                movimentacoes[0]++;
+                swap(i, j);
+            }
+            }
+            movimentacoes[0]++;
+            swap(i + 1, right);
+            return i + 1;
+        }
+    }
+
+    public static void arquivoLog(double duracao, int[] comparacoes, int[] movimentacoes){
+        String matricula = "869118";
+        try {
+            PrintWriter w = new PrintWriter(matricula + "_quicksort3.txt");
+            w.printf("%s\t%d\t%d\t%fms", matricula, comparacoes[0], movimentacoes[0], duracao);
+            w.close();
+        } catch (IOException e) {
+            System.err.println("Erro para escrever no arquivo de log: " + e.getMessage());
         }
     }
     public static void main(String[] args) {
@@ -351,6 +427,7 @@ public class Show {
         ArrayList<Show> listaShow = ler();
         DoubleLinkedList lista = new DoubleLinkedList();
         String id = "";
+        long inicio = System.nanoTime();
         id = input.nextLine();
         while (!id.equals("FIM")) {
             for (int i = 0; i < listaShow.size(); i++) {
@@ -361,7 +438,24 @@ public class Show {
             id = input.nextLine();
         }
 
+        int[] comparacoes = new int[1];
+        int[] movimentacoes = new int[1];
+
+        int listSize = 0;
+        DoubleLinkedList.Node temp = lista.head;
+        while (temp != null) {
+            listSize++;
+            temp = temp.next;
+        }
+
+        lista.quickSort(0, listSize - 1, comparacoes, movimentacoes);
         lista.showList();
+
+
+        long fim = System.nanoTime();
+        int duracao = (int) ((fim - inicio) / 1000000);
+        arquivoLog(duracao, comparacoes, movimentacoes);
+        
         input.close();
 
     }
