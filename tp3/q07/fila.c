@@ -1,6 +1,8 @@
 #include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
+#include <math.h>
+
 
 #define MAX 200
 #define MAX_LIST 11
@@ -282,151 +284,98 @@ char **separarLinha(char *linha) {
 }
 
 
-// Double Linked List
+// Fila Circular;
 
-typedef struct Node {
-    Show show;
+typedef struct Node
+{
     struct Node *next;
-    struct Node *prev;
+    struct Node *previous;
+    Show *value;
 } Node;
-
-Node* createNode(Show show){
-    Node *newNode = (Node*) malloc(sizeof(Node));
-    newNode->show = show;
+Node *createNode(Show *show)
+{
+    Node *newNode = (Node *)malloc(sizeof(Node));
+    newNode->value = show;
     newNode->next = NULL;
-    newNode->prev = NULL;
+    newNode->previous = NULL;
+    return newNode;
 }
 
-typedef struct List {
+typedef struct QueueLLShow
+{
     Node *head;
     Node *tail;
-} List;
-
-List *createList(){
-    List* list = (List*) malloc(sizeof(List));
-    list->head = NULL;
-    list->tail = NULL;
-    return list;
+    int size;
+    int sum;
+    int maxSize;
+} QueueLLShow;
+QueueLLShow *createQueueLLShow()
+{
+    QueueLLShow *ll = (QueueLLShow *)malloc(sizeof(QueueLLShow));
+    ll->head = NULL;
+    ll->tail = NULL;
+    ll->size = 0;
+    ll->sum = 0;
+    ll->maxSize = 5;
+    return ll;
 }
+Show *dequeueLL(QueueLLShow *q)
+{
+    if (q->head == NULL)
+        return NULL;
 
-void insertAtBegin(List *list, Show show) {
+    Node *node = q->tail;
+    Show *removed = node->value;
+
+    if (q->head == q->tail)
+    {
+        q->head = NULL;
+        q->tail = NULL;
+    }
+    else
+    {
+        q->tail = q->tail->previous;
+        q->tail->next = NULL;
+    }
+
+    free(node);
+    q->size--;
+    q->sum -= removed->releaseYear;
+
+    return removed;
+}
+void enqueueLL(QueueLLShow *q, Show *show)
+{
+    if (q->size == q->maxSize)
+    {
+        dequeueLL(q);
+    }
     Node *newNode = createNode(show);
-    if (list->head == NULL) {
-        list->head = newNode;
-        list->tail = newNode;
-    } else {
-        newNode->next = list->head;
-        list->head->prev = newNode;
-        list->head = newNode;
+    if (q->head == NULL && q->tail == NULL)
+    {
+        q->tail = q->head = newNode;
+        newNode->next = newNode->previous = newNode;
     }
-}
+    else
+    {
+        newNode->next = q->head;
+        newNode->previous = q->tail;
+        q->head->previous = newNode;
+        q->tail->next = newNode;
+        q->head = newNode;
+    }
+    q->size++;
+    q->sum += show->releaseYear;
 
-void insert(List* list, Show show, int pos) {
-    if (pos == 0) {
-        insertAtBegin(list, show);
-    } else {
-        Node *newNode = createNode(show);
-        Node *current = list->head;
-        for (int i = 0; i < pos - 1 && current != NULL; i++) {
-            current = current->next;
-        }
-        if (current == NULL) {
-            insertAtEnd(list, show);
-        } else {
-            newNode->next = current->next;
-            newNode->prev = current;
-            if (current->next != NULL) {
-                current->next->prev = newNode;
-            } else {
-                list->tail = newNode;
-            }
-            current->next = newNode;
-        }
-    }
+    printf("[Media] %d\n", q->sum / q->size);
 }
-
-void insertAtEnd(List *list, Show show) {
-    Node *newNode = createNode(show);
-    if (list->head == NULL) {
-        list->head = newNode;
-        list->tail = newNode;
-    } else {
-        list->tail->next = newNode;
-        newNode->prev = list->tail;
-        list->tail = newNode;
-    }
-}
-
-Show removeAtBegin(List *list) {
-    if (list->head == NULL) {
-        printf("Lista vazia!\n");
-        return newShow();
-    }
-    Node *temp = list->head;
-    Show show = temp->show;
-    list->head = temp->next;
-    if (list->head != NULL) {
-        list->head->prev = NULL;
-    } else {
-        list->tail = NULL;
-    }
-    free(temp);
-    return show;
-}
-
-Show removeAtEnd(List *list) {
-    if (list->tail == NULL) {
-        printf("Lista vazia!\n");
-        return newShow();
-    }
-    Node *temp = list->tail;
-    Show show = temp->show;
-    list->tail = temp->prev;
-    if (list->tail != NULL) {
-        list->tail->next = NULL;
-    } else {
-        list->head = NULL;
-    }
-    free(temp);
-    return show;
-}
-
-Show removeAt(List *list, int pos) {
-    if (list->head == NULL) {
-        printf("Lista vazia!\n");
-        return newShow();
-    }
-    if (pos == 0) {
-        return removeAtBegin(list);
-    }
-    Node *current = list->head;
-    for (int i = 0; i < pos && current != NULL; i++) {
-        current = current->next;
-    }
-    if (current == NULL) {
-        printf("Posição inválida!\n");
-        return newShow();
-    }
-    Show show = current->show;
-    if (current->prev != NULL) {
-        current->prev->next = current->next;
-    } else {
-        list->head = current->next;
-    }
-    if (current->next != NULL) {
-        current->next->prev = current->prev;
-    } else {
-        list->tail = current->prev;
-    }
-    free(current);
-    return show;
-}
-
-void showList(List *list) {
-    Node *current = list->head;
-    while (current != NULL) {
-        imprimir(current->show);
-        current = current->next;
+void printQueueLL(QueueLLShow *s)
+{
+    Node *cur = s->tail;
+    for (int i = s->size - 1; i >= 0 && cur != NULL; cur = cur->previous, i--)
+    {
+        printf("[%d] ", i);
+        imprimir(*(cur->value));
     }
 }
 
@@ -436,12 +385,14 @@ int main() {
     char id[MAX_LIST];
     scanf(" %[^\r\n]", id);
 
-    List *list = createList();
+
+
+        QueueLLShow *list  = createQueueLLShow();
 
     while (strcmp(id, "FIM") != 0) {
         for (int i = 0; i < quant; i++) {
             if (strcmp(id, show[i].showId) == 0) {
-                insertAtEnd(list, show[i]);
+                enqueueLL(list, show+i);
             }
         } 
         scanf(" %[^\r\n]", id);
@@ -452,61 +403,27 @@ int main() {
     getchar();
 
     char line[256];
-    
     for(int i = 0; i < tt; i++){
         if (fgets(line, sizeof(line), stdin) == NULL) break;
 
         char op[4], showId[MAX];
-        int pos;
-        if(line[1] == '*'){
-            sscanf(line, "%s %d %s", op, &pos, showId);
-        }else{
+        if (line[0] == 'I') {
             sscanf(line, "%s %s", op, showId);
-        }
-
-        //printf("%s %s %d\n",op, showId, pos);
-            if(strcmp(op, "II") == 0){
-                for(int i = 0; i < quant; i++){
-                    if(strcmp(showId,show[i].showId) == 0){
-                        insertAtBegin(list, show[i]);
-                        break;
-                    }
-                }
-            }else if(strcmp(op, "IF") == 0){
-                for(int i = 0; i < quant; i++){
-                    if(strcmp(showId,show[i].showId) == 0){
-                        insertAtEnd(list, show[i]);
-                        break;
-                    }
-                }
-            }else if(strcmp(op, "I*") == 0){
-                for(int i = 0; i < quant; i++){
-                    if(strcmp(showId,show[i].showId) == 0){
-                        insert(list, show[i], pos);
-                        break;
-                    }
-                }
-            }else if(strcmp(op, "RI") == 0){
-                Show removedShow = removeAtBegin(list);
-                if (strcmp(removedShow.showId, "NaN") != 0) {
-                    printf("(R) %s\n",removedShow.title);
-                }
-            }else if(strcmp(op, "RF") == 0){
-                Show removedShow = removeAtEnd(list);
-                if (strcmp(removedShow.showId, "NaN") != 0) {
-                    printf("(R) %s\n",removedShow.title);
-                }
-            }else if(strcmp(op, "R*") == 0){
-                    Show removedShow = removeAt(list, pos);
-                    if (strcmp(removedShow.showId, "NaN") != 0) {
-                        printf("(R) %s\n",removedShow.title);
-                }
+            for (int j = 0; j < quant; j++) {
+            if (strcmp(showId, show[j].showId) == 0) {
+                enqueueLL(list, &show[j]);
+                break;
             }
-            
-           
-        
-
+            }
+        } else if (line[0] == 'R') {
+            Show *removedShow = dequeueLL(list);
+            if (removedShow != NULL && strcmp(removedShow->showId, "NaN") != 0) {
+            printf("(R) %s\n", removedShow->title);
+            } else {
+            printf("Fila vazia!\n");
+            }
+        }
     }
 
-    showList(list);
+    printQueueLL(list);
 }

@@ -452,7 +452,6 @@ int main() {
     getchar();
 
     char line[256];
-    
     for(int i = 0; i < tt; i++){
         if (fgets(line, sizeof(line), stdin) == NULL) break;
 

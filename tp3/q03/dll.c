@@ -430,6 +430,30 @@ void showList(List *list) {
     }
 }
 
+int size(List *list){
+    Node *current = list->head;
+    int i = 0;
+
+    while(current != NULL){
+        i++;
+        current = current->next;
+    }
+
+    return i;
+}
+
+void showListInvert(List * list){
+    Node *current = list->tail;
+    int i = size(list);
+    i--;
+    while(current != NULL){
+        printf("[%d] ", i--);
+        imprimir(current->show);
+        current = current->prev;
+    }
+
+}
+
 int main() {
     Show *show = ler();
     int quant = quantidade();
@@ -452,61 +476,64 @@ int main() {
     getchar();
 
     char line[256];
-    
     for(int i = 0; i < tt; i++){
         if (fgets(line, sizeof(line), stdin) == NULL) break;
 
         char op[4], showId[MAX];
         int pos;
-        if(line[1] == '*'){
-            sscanf(line, "%s %d %s", op, &pos, showId);
-        }else{
+        if(line[0] == 'I'){
             sscanf(line, "%s %s", op, showId);
+        }else{
+            sscanf(line, "%s", op);
         }
 
         //printf("%s %s %d\n",op, showId, pos);
-            if(strcmp(op, "II") == 0){
-                for(int i = 0; i < quant; i++){
-                    if(strcmp(showId,show[i].showId) == 0){
-                        insertAtBegin(list, show[i]);
-                        break;
-                    }
-                }
-            }else if(strcmp(op, "IF") == 0){
+            // if(strcmp(op, "II") == 0){
+            //     for(int i = 0; i < quant; i++){
+            //         if(strcmp(showId,show[i].showId) == 0){
+            //             insertAtBegin(list, show[i]);
+            //             break;
+            //         }
+            //     }
+            //}
+            if(strcmp(op, "I") == 0){
                 for(int i = 0; i < quant; i++){
                     if(strcmp(showId,show[i].showId) == 0){
                         insertAtEnd(list, show[i]);
                         break;
                     }
                 }
-            }else if(strcmp(op, "I*") == 0){
-                for(int i = 0; i < quant; i++){
-                    if(strcmp(showId,show[i].showId) == 0){
-                        insert(list, show[i], pos);
-                        break;
-                    }
-                }
-            }else if(strcmp(op, "RI") == 0){
-                Show removedShow = removeAtBegin(list);
-                if (strcmp(removedShow.showId, "NaN") != 0) {
-                    printf("(R) %s\n",removedShow.title);
-                }
-            }else if(strcmp(op, "RF") == 0){
+            }
+            //else if(strcmp(op, "I*") == 0){
+            //     for(int i = 0; i < quant; i++){
+            //         if(strcmp(showId,show[i].showId) == 0){
+            //             insert(list, show[i], pos);
+            //             break;
+            //         }
+            //     }
+            //}
+            else if(strcmp(op, "R") == 0){
                 Show removedShow = removeAtEnd(list);
                 if (strcmp(removedShow.showId, "NaN") != 0) {
                     printf("(R) %s\n",removedShow.title);
                 }
-            }else if(strcmp(op, "R*") == 0){
-                    Show removedShow = removeAt(list, pos);
-                    if (strcmp(removedShow.showId, "NaN") != 0) {
-                        printf("(R) %s\n",removedShow.title);
-                }
             }
+            //else if(strcmp(op, "RF") == 0){
+            //     Show removedShow = removeAtEnd(list);
+            //     if (strcmp(removedShow.showId, "NaN") != 0) {
+            //         printf("(R) %s\n",removedShow.title);
+            //     }
+            // }else if(strcmp(op, "R*") == 0){
+            //         Show removedShow = removeAt(list, pos);
+            //         if (strcmp(removedShow.showId, "NaN") != 0) {
+            //             printf("(R) %s\n",removedShow.title);
+            //     }
+            // }
             
            
         
 
     }
 
-    showList(list);
+    showListInvert(list);
 }
